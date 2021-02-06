@@ -1,5 +1,7 @@
 package no.hvl.dat110.rpc;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import no.hvl.dat110.TODO;
@@ -16,9 +18,13 @@ public class RPCUtils {
 		byte[] encoded;
 
 		// TODO: marshall RPC identifier and string into byte array
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		
+		byte[] stringAsBytes = str.getBytes();
+		encoded = new byte[stringAsBytes.length + 1];
+		encoded[0] = rpcid;
+		
+		for (int i = 1; i <= str.length(); i++) {
+			encoded[i] = stringAsBytes[i-1];
 		}
 
 		return encoded;
@@ -29,10 +35,13 @@ public class RPCUtils {
 		String decoded;
 
 		// TODO: unmarshall String contained in data into decoded
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		
+		byte[] dataAfterZero = new byte[data.length -1];
+		for (int i = 0; i < dataAfterZero.length; i++) {
+			dataAfterZero[i] = data[i+1];
 		}
+		
+		decoded = new String(dataAfterZero);
 
 		return decoded;
 	}
@@ -42,10 +51,9 @@ public class RPCUtils {
 		byte[] encoded;
 
 		// TODO: marshall RPC identifier in case of void type
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
-		}
+		
+		encoded = new byte[1];
+		encoded[0] = rpcid;
 
 		return encoded;
 
@@ -82,9 +90,12 @@ public class RPCUtils {
 		byte[] encoded;
 
 		// TODO: marshall RPC identifier and string into byte array
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		ByteBuffer bb = ByteBuffer.allocate(4);
+		bb.putInt(x);
+		encoded = new byte[5];
+		encoded[0] = rpcid;
+		for (int i = 1; i < encoded.length; i++) {
+			encoded[i] = bb.array()[i-1];
 		}
 
 		return encoded;
@@ -95,10 +106,14 @@ public class RPCUtils {
 		int decoded;
 
 		// TODO: unmarshall integer contained in data
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		
+		byte[] dataAfterZero = new byte[data.length -1];
+		for (int i = 0; i < dataAfterZero.length; i++) {
+			dataAfterZero[i] = data[i+1];
 		}
+		
+		ByteBuffer byteBuffer = ByteBuffer.wrap(dataAfterZero);
+		decoded = byteBuffer.getInt();
 
 		return decoded;
 
